@@ -1,0 +1,104 @@
+FOREGIN KEY
+-----------
+
+
+mysql>create database org;
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| org                |
+| organaization      |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> use org;
+Database changed
+
+
+mysql>create table departments(dept_id primary key,Department_Name varchar(30) NOT NULL,Dept_location  varchar(30) unique);
+
+mysql> show tables;
++---------------+
+| Tables_in_org |
++---------------+
+| departments   |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> desc departments;
++-----------------+-------------+------+-----+---------+-------+
+| Field           | Type        | Null | Key | Default | Extra |
++-----------------+-------------+------+-----+---------+-------+
+| dept_id         | int         | NO   | PRI | NULL    |       |
+| Department_Name | varchar(30) | NO   |     | NULL    |       |
+| Dept_location   | varchar(30) | YES  | UNI | NULL    |       |
++-----------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql>  insert into departments(dept_id,Department_Name,Dept_location) values 
+(1,'sales','BLOCK-A'),
+(2,'Marketing','BLOCK-B'),
+(3,'IT','BLOCK-C');
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from departments;
++---------+-----------------+---------------+
+| dept_id | Department_Name | Dept_location |
++---------+-----------------+---------------+
+|       1 | sales           | BLOCK-A       |
+|       2 | Marketing       | BLOCK-B       |
+|       3 | IT              | BLOCK-C       |
++---------+-----------------+---------------+
+3 rows in set (0.00 sec)
+
+
+
+
+
+//EMP TABLE
+mysql> CREATE TABLE emp (
+    ->     Emp_id INT PRIMARY KEY,
+    ->     Emp_Name VARCHAR(30) NOT NULL,
+    ->     Dept_id INT,
+    ->     FOREIGN KEY (Dept_id) REFERENCES departments(dept_id)
+    -> );
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> insert into emp(Emp_id,Emp_Name,Dept_id) values
+(11,'srinivas',1),
+(12,'Praveen',2),
+(13,'pandu',3);
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from departments;
++---------+-----------------+---------------+
+| dept_id | Department_Name | Dept_location |
++---------+-----------------+---------------+
+|       1 | sales           | BLOCK-A       |
+|       2 | Marketing       | BLOCK-B       |
+|       3 | IT              | BLOCK-C       |
++---------+-----------------+---------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from emp;
++--------+----------+---------+
+| Emp_id | Emp_Name | Dept_id |
++--------+----------+---------+
+|     11 | srinivas |       1 |
+|     12 | Praveen  |       2 |
+|     13 | pandu    |       3 |
++--------+----------+---------+
+3 rows in set (0.00 sec)
+
+mysql> insert into emp(Emp_id,Emp_Name,Dept_id) values
+(14,'srinivas',4);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`org`.`emp`, CONSTRAINT `emp_ibfk_1` FOREIGN KEY (`Dept_id`) REFERENCES `departments` (`dept_id`))
+mysql>

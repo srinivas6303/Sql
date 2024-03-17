@@ -1,0 +1,125 @@
+ARITHMETIC OPERATORS IN MYSQL
+----------------------------
++,-,/,%
+
+mysql> use college;
+Database changed
+
+mysql> create table Teachers(
+	Teacher_id int primary key,
+	Teacher_Name varchar (30) NOT NULL,
+	Salary int Default 0,
+	Dept_id  int );
+	Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc Teachers;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| Teacher_id   | int         | NO   | PRI | NULL    |       |
+| Teacher_Name | varchar(30) | NO   |     | NULL    |       |
+| Salary       | int         | YES  |     | 0       |       |
+| Dept_id      | int         | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+
+mysql> insert into Teachers values(
+	1011,'P.Srinivas',50000,11),
+	(1012,'K.Ramana',40000,12),
+	(1013,'M.Srikant',90000,13),
+	(1014,'L.Madhav',70000,14);
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from Teachers;
++------------+--------------+--------+---------+
+| Teacher_id | Teacher_Name | Salary | Dept_id |
++------------+--------------+--------+---------+
+|       1011 | P.Srinivas   |  50000 |      11 |
+|       1012 | K.Ramana     |  40000 |      12 |
+|       1013 | M.Srikant    |  90000 |      13 |
+|       1014 | L.Madhav     |  70000 |      14 |
++------------+--------------+--------+---------+
+4 rows in set (0.00 sec)
+
+
+
+
+Increment by 10000(+)
+---------------------
+mysql> select  Teacher_Name,   Salary+10000 as "salary increment by 10000" from Teachers;
++--------------+---------------------------+
+| Teacher_Name | salary increment by 10000 |
++--------------+---------------------------+
+| P.Srinivas   |                     60000 |
+| K.Ramana     |                     50000 |
+| M.Srikant    |                    100000 |
+| L.Madhav     |                     80000 |
++--------------+---------------------------+
+4 rows in set (0.00 sec)
+
+
+
+Decrement by 10000(-)
+---------------------
+ mysql> select  Teacher_Name,   Salary-10000 as "salary Decrement by 10000" from Teachers;
++--------------+---------------------------+
+| Teacher_Name | salary Decrement by 10000 |
++--------------+---------------------------+
+| P.Srinivas   |                     40000 |
+| K.Ramana     |                     30000 |
+| M.Srikant    |                     80000 |
+| L.Madhav     |                     60000 |
++--------------+---------------------------+
+4 rows in set (0.00 sec)
+
+
+
+
+
+
+Annual salary(*)
+----------------
+mysql> select  Teacher_Name,   Salary*12 as "Annual Salary" from Teachers;
++--------------+---------------+
+| Teacher_Name | Annual Salary |
++--------------+---------------+
+| P.Srinivas   |        600000 |
+| K.Ramana     |        480000 |
+| M.Srikant    |       1080000 |
+| L.Madhav     |        840000 |
++--------------+---------------+
+4 rows in set (0.00 sec)
+
+
+
+
+6 months salary(/)
+------------------
+mysql> select  Teacher_Name,   Salary*12/2 as "6 months Salary" from Teachers;
++--------------+---------------+
+| Teacher_Name | 6 months Salary |
++--------------+---------------+
+| P.Srinivas   |   300000.0000 |
+| K.Ramana     |   240000.0000 |
+| M.Srikant    |   540000.0000 |
+| L.Madhav     |   420000.0000 |
++--------------+---------------+
+4 rows in set (0.00 sec)
+
+
+
+Incremented by 10% salary(%)
+----------------------------
+mysql> select  Teacher_Name,Salary+(Salary*0.1) as "10% salary increment " from Teachers;
++--------------+-----------------------+
+| Teacher_Name | 10% salary increment  |
++--------------+-----------------------+
+| P.Srinivas   |               55000.0 |
+| K.Ramana     |               44000.0 |
+| M.Srikant    |               99000.0 |
+| L.Madhav     |               77000.0 |
++--------------+-----------------------+
+4 rows in set (0.00 sec)
+

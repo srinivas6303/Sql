@@ -1,0 +1,123 @@
+MYSQL CONSTRAINTS 
+-----------------
+
+1.PRIMARY KEY Constraint:
+-------------------------
+This constraint uniquely identifies each record in a table. It ensures that the values in the specified column(s) are unique and not NULL. Only one primary key constraint is allowed per table.
+
+2.UNIQUE Constraint:
+--------------------
+This constraint ensures that all values in the specified column(s) are unique. Unlike the primary key constraint, multiple unique constraints can exist per table, and they can contain NULL values (except in the case of a composite unique constraint).
+
+3.FOREIGN KEY Constraint:
+-------------------------
+This constraint establishes a relationship between two tables. It ensures referential integrity by enforcing that the values in the specified column(s) of one table match the values in another table's column(s).
+
+4.CHECK Constraint: 
+-------------------
+This constraint defines a condition that must be satisfied for the data to be valid. It allows you to specify a Boolean expression that each row must satisfy.
+
+5.NOT NULL Constraint: 
+----------------------
+This constraint ensures that a column cannot contain NULL values.
+
+6.DEFAULT Constraint:
+---------------------
+This constraint assigns a default value to a column when no value is explicitly provided during insertion.
+
+mysql> create database college;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use college;
+Database changed
+
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| college            |
+| information_schema |
+| mysql              |
+| org                |
+| organaization      |
+| performance_schema |
+| sys                |
++--------------------+
+7 rows in set (0.02 sec)
+
+
+
+mysql> CREATE TABLE students (
+    ->     Roll_No int PRIMARY KEY,                  --NOT NULL+UNIQUE
+    ->     StudentName varchar(30) NOT NULL,         --DOES NOT ALL NULL VALUES
+    ->     Age int CHECK (Age > 18),                 --CHECK IS USED TO CHECK AGE IS GREATER THAN 18
+    ->     Class varchar(10),                        --INSERT NULL VALUE AND DUPLICATE VALUES
+    ->     MobileNo int UNIQUE,                      --DOES NOT ALLOW DUPLICATE VALUES
+    ->     Address varchar(30) DEFAULT 'NOT ENTERED' --DEFAULT VALUE WILL ASSIGN
+    -> );
+
+
+
+mysql> desc students;
++-------------+-------------+------+-----+-------------+-------+
+| Field       | Type        | Null | Key | Default     | Extra |
++-------------+-------------+------+-----+-------------+-------+
+| Roll_No     | int         | NO   | PRI | NULL        |       |
+| StudentName | varchar(30) | NO   |     | NULL        |       |
+| Age         | int         | YES  |     | NULL        |       |
+| Class       | varchar(10) | YES  |     | NULL        |       |
+| MobileNO    | varchar(30) | YES  | UNI | NULL        |       |
+| Address     | varchar(30) | YES  |     | NOT ENTERED |       |
++-------------+-------------+------+-----+-------------+-------+
+6 rows in set (0.01 sec)
+
+
+
+
+
+mysql> insert into students( Roll_No, StudentName,Age,Class,MobileNo,Address) Values
+(1,'D.Srinivas',19,'X','6303336789','3,Hyderabad');
+Query OK, 1 row affected (0.01 sec)
+
+
+mysql> insert into students( Roll_No, StudentName,Age,Class,MobileNo,Address) Values
+(2,'K.Praveen',20,'X','6304436789','38-33,Malakpet'),
+(3,'B.vamshi',20,'X','7304436789','8-33,Karimnagar');
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+
+
+mysql> select * from students;
++---------+-------------+------+-------+------------+-----------------+
+| Roll_No | StudentName | Age  | Class | MobileNO   | Address         |
++---------+-------------+------+-------+------------+-----------------+
+|       1 | D.Srinivas  |   19 | X     | 6303336789 | 3,Hyderabad     |
+|       2 | K.Praveen   |   20 | X     | 6304436789 | 38-33,Malakpet  |
+|       3 | B.vamshi    |   20 | X     | 7304436789 | 8-33,Karimnagar |
++---------+-------------+------+-------+------------+-----------------+
+3 rows in set (0.00 sec)
+
+
+
+--Default value
+mysql> INSERT INTO students (Roll_No, StudentName, Age, Class, MobileNo)
+    -> VALUES (4, 'P.Chotu', 19, 'X', '9904436789');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from students;
++---------+-------------+------+-------+------------+-----------------+
+| Roll_No | StudentName | Age  | Class | MobileNO   | Address         |
++---------+-------------+------+-------+------------+-----------------+
+|       1 | D.Srinivas  |   19 | X     | 6303336789 | 3,Hyderabad     |
+|       2 | K.Praveen   |   20 | X     | 6304436789 | 38-33,Malakpet  |
+|       3 | B.vamshi    |   20 | X     | 7304436789 | 8-33,Karimnagar |
+|       4 | P.Chotu     |   19 | X     | 9904436789 | NOT ENTERED     |
++---------+-------------+------+-------+------------+-----------------+
+4 rows in set (0.00 sec)
+
+
+--check
+mysql>insert into students values(5,'M.Mahesh',17,'X','987654321','30-33,Hayathnagar');
+ERROR 3819 (HY000): Check constraint 'students_chk_1' is violated.

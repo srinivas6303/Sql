@@ -1,0 +1,62 @@
+Group by & Having
+_________________
+• In SQL, the GROUP BY clause is used to group rows by one or more columns.
+
+• Note: The GROUP BY clause is used in conjunction with aggregate functions such as MIN(), MAX), SUM(),
+  AVG() and COUNT(), etc.
+
+• The HAVING clause was added to SQL because the WHERE keyword cannot be used with aggregate functions.
+
+• We can use the GROUP BY clause with the HAVING clause to filter the result set based on aggregate functions.
+
+EXAMPLE:
+--------
+
+CREATE TABLE EMPLOYEE (
+  EmpId int PRIMARY KEY,
+  Name varchar(30) NOT NULL,
+  Dept varchar(30) NOT NULL,
+  Salary int,
+  City varchar(30),
+  State varchar(30)
+);
+
+INSERT INTO EMPLOYEE VALUES (0001, 'Clark', 'Sales', 90000, 'Hyderabad', 'Telangana');
+INSERT INTO EMPLOYEE VALUES (0002, 'Dave', 'Accounting', 20000, 'Kadapa', 'Andhra Pradesh');
+INSERT INTO EMPLOYEE VALUES (0003, 'Ava', 'Sales', 80000, 'Rampur', 'Uttar Pradesh');
+INSERT INTO EMPLOYEE VALUES (0004, 'DK', 'Accounting', 78898, 'Srirampur', 'Telangana');
+INSERT INTO EMPLOYEE VALUES (0005, 'Dave', 'Accounting', 20000, 'Kadapa', 'Andhra Pradesh');
+
+SELECT * FROM EMPLOYEE;
+
+
+
+
+SELECT State,count(EmpId) as empcount FROM EMPLOYEE
+GROUP BY State;
+
+SELECT State,City ,count(EmpId) as empcount FROM EMPLOYEE
+GROUP BY State,city;
+
+
+
+
+
+SELECT State,sum(Salary) as TotalSalaey FROM EMPLOYEE
+GROUP BY State;
+
+SELECT State, City,sum(Salary) as TotalSalaey FROM EMPLOYEE
+GROUP BY State,City;
+
+
+HAVING:
+-------
+SELECT State,count(EmpId) as empcount FROM EMPLOYEE
+GROUP BY State
+Having  count(EmpId)>1;
+
+SELECT State, sum(Salary) as TotalSalary FROM EMPLOYEE
+GROUP BY State
+Having sum(Salary) >= 80000;
+
+

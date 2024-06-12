@@ -1,0 +1,233 @@
+JOINS
+-----
+A JOIN clause is used to combine rows from two or more tables, based on a related column between them.
+                                    (or)
+Joins in sql server are used to retrieve data from two or more tables.In general tables are related to each using foreign key constraints
+
+
+
+Total 3 types of joins in sql:
+------------------------------
+1.INNER JOIN(only matched rows only)
+SELECT column_name(s)
+FROM table_name1
+INNER JOIN table_name2
+ON table_name1.column_name = table_name2.column_name
+
+
+2.OUTER JOIN(OUTER JOIN DIVIDED INTO 3 JOINS)
+   I>   LEFT OUTER JOIN (left table returns all rows & right table return only matched rows)
+   II>  RIGHT OUTER JOIN(right table returns all rows & left table return only matched rows)
+   III> FULL OUTER JOIN(both right and left table contain all matched rows and non matched rows)
+
+
+SELECT columns                     
+FROM table1
+LEFT [OUTER] JOIN table2
+ON Join_Condition;
+
+SELECT columns
+FROM table1
+RIGHT [OUTER] JOIN table2
+ON Join_Condition;
+
+SELECT columns
+FROM table1
+FULL [OUTER] JOIN table2
+ON Join_Condition;
+
+
+3.CROSS JOIN
+
+
+
+
+
+
+Examples:
+---------
+
+
+
+-- Create Tables
+CREATE TABLE StateInfo (
+  Statecode int PRIMARY KEY,
+  StateName varchar(30) NOT NULL
+);
+
+CREATE TABLE DistInfo (
+  Distcode int PRIMARY KEY,
+  DistName varchar(30) NOT NULL
+);
+
+CREATE TABLE usersInfo (
+  UserId int PRIMARY KEY,
+  UserName varchar(30) NOT NULL,
+  Statecode int,
+  DistCode int,
+  foreign key (Statecode) references StateInfo(Statecode),
+  foreign key (DistCode) references DistInfo(Distcode)
+);
+
+-- Insert Data
+INSERT INTO StateInfo VALUES (0001, 'Telangana');
+INSERT INTO StateInfo VALUES (0002, 'Andhra Pradesh');
+INSERT INTO StateInfo VALUES (0003, 'Karnataka');
+
+INSERT INTO DistInfo VALUES (01, 'Sangareddy');
+INSERT INTO DistInfo VALUES (02, 'Medak');
+INSERT INTO DistInfo VALUES (03, 'Siddipet');
+INSERT INTO DistInfo VALUES (04, 'Warangal');
+INSERT INTO DistInfo VALUES (05, 'Suryapet');
+
+
+
+
+-- Insert Data into usersInfo
+INSERT INTO usersInfo VALUES (1, 'srinivas', 0001, 01);
+INSERT INTO usersInfo VALUES (2, 'praveen', 0002, 03);
+INSERT INTO usersInfo VALUES (3, 'shalon', 0003, 05);
+INSERT INTO usersInfo VALUES (4, 'srikar', 0003, NULL);
+
+
+-- Fetch Data
+SELECT * FROM usersInfo;
+SELECT * FROM DistInfo;
+SELECT * FROM StateInfo;
+
+
+
+
+INNER JOIN
+----------------------------------------------------------------------------------------
+SELECT 
+    usersInfo.UserId,
+    usersInfo.UserName,
+    DistInfo.DistName,
+    StateInfo.StateName
+FROM 
+    usersInfo
+INNER JOIN 
+    DistInfo ON usersInfo.DistCode = DistInfo.Distcode
+INNER JOIN 
+    StateInfo ON usersInfo.Statecode = StateInfo.Statecode;
+
+
+
+    
+
+
+    
+LEFT OUTER JOIN
+-----------------------------------------------------------------------------
+SELECT 
+    usersInfo.UserId,
+    usersInfo.UserName,
+    DistInfo.DistName
+FROM 
+    usersInfo
+LEFT JOIN 
+    DistInfo ON usersInfo.DistCode = DistInfo.Distcode;
+    
+    
+
+
+
+
+
+
+RIGHT OUTER JOIN
+-----------------------------------------------------------------------------
+SELECT 
+    usersInfo.UserId,
+    usersInfo.UserName,
+    DistInfo.DistName
+FROM 
+    usersInfo
+Right outer JOIN 
+    DistInfo ON usersInfo.DistCode = DistInfo.Distcode;
+    
+    
+
+
+FULL OUTER JOIN
+-----------------------------------------------------------------------------  
+SELECT 
+    usersInfo.UserId,
+    usersInfo.UserName,
+    DistInfo.DistName
+FROM 
+    usersInfo
+FULL OUTER JOIN 
+    DistInfo ON usersInfo.DistCode = DistInfo.Distcode;
+
+
+
+OUTPUTS:
+--------
++--------+----------+-----------+----------+
+| UserId | UserName | Statecode | DistCode |
++--------+----------+-----------+----------+
+|      1 | srinivas |         1 |        1 |
+|      2 | praveen  |         2 |        3 |
+|      3 | shalon   |         3 |        5 |
+|      4 | srikar   |         3 |     NULL |
++--------+----------+-----------+----------+
++----------+------------+
+| Distcode | DistName   |
++----------+------------+
+|        1 | Sangareddy |
+|        2 | Medak      |
+|        3 | Siddipet   |
+|        4 | Warangal   |
+|        5 | Suryapet   |
++----------+------------+
++-----------+----------------+
+| Statecode | StateName      |
++-----------+----------------+
+|         1 | Telangana      |
+|         2 | Andhra Pradesh |
+|         3 | Karnataka      |
++-----------+----------------+
+
+INNER JOIN
++--------+----------+------------+----------------+
+| UserId | UserName | DistName   | StateName      |
++--------+----------+------------+----------------+
+|      1 | srinivas | Sangareddy | Telangana      |
+|      2 | praveen  | Siddipet   | Andhra Pradesh |
+|      3 | shalon   | Suryapet   | Karnataka      |
++--------+----------+------------+----------------+
+
+LEFT JOIN
++--------+----------+------------+
+| UserId | UserName | DistName   |
++--------+----------+------------+
+|      1 | srinivas | Sangareddy |
+|      2 | praveen  | Siddipet   |
+|      3 | shalon   | Suryapet   |
+|      4 | srikar   | NULL       |
++--------+----------+------------+
+
+RIGHT JOIN
++--------+----------+------------+
+| UserId | UserName | DistName   |
++--------+----------+------------+
+|      1 | srinivas | Sangareddy |
+|   NULL | NULL     | Medak      |
+|      2 | praveen  | Siddipet   |
+|   NULL | NULL     | Warangal   |
+|      3 | shalon   | Suryapet   |
++--------+----------+------------+
+
+FULL OUTER JOIN
++--------+-----------+------------+
+| UserId | UserName  | DistName   |
++--------+-----------+------------+
+| 1      | srinivas  | Sangareddy |
+| 2      | praveen   | Siddipet   |
+| 3      | shalon    | Suryapet   |
+| 4      | srikar    | NULL       |
+| NULL   | NULL      | Medak      |
+| NULL   | NULL      | Warangal   |
++--------+-----------+------------+

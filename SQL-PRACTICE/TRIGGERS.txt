@@ -1,0 +1,174 @@
+                                        TRIGGERS
+=================================================================================================
+Triggers are the SQL codes that are automatically executed in response 
+to certain events on a particular table. These are used to maintain the integrity of the data.
+
+syntax:
+-------
+CREATE [OR REPLACE ] TRIGGER trigger_name
+{BEFORE | AFTER | INSTEAD OF }
+{INSERT [OR] | UPDATE [OR] | DELETE}
+ON table_name
+[FOR EACH ROW]
+WHEN (condition)
+[trigger_body]
+
+
+Example:
+--------
+
+-- Create the students table
+CREATE TABLE students (
+  Rollno INT PRIMARY KEY,
+  Name VARCHAR(30) NOT NULL,
+  Marks DECIMAL(5,2) NOT NULL
+);
+
+-- Insert initial data into the students table
+INSERT INTO students VALUES (1, 'SRINIVAS', 100.00);
+INSERT INTO students VALUES (2, 'VAMSHI', 90.00);
+INSERT INTO students VALUES (3, 'VIJAY', 80.23);
+
+-- Fetch all data from the students table
+SELECT * FROM students;
+
+-- Create trigger to add 100 to Marks before insert
+CREATE TRIGGER addmarks
+BEFORE INSERT ON students
+FOR EACH ROW
+SET NEW.Marks = NEW.Marks + 100;
+
+-- Test the addmarks trigger
+INSERT INTO students VALUES (4, 'ARJUN', 50.00);
+
+-- Fetch all data from the students table
+SELECT * FROM students;
+
+-- Create the finalMarks table
+CREATE TABLE finalMarks (
+  TotalMarks DECIMAL(5,2)
+);
+
+-- Create trigger to insert into finalMarks after insert on students
+CREATE TRIGGER finalm
+AFTER INSERT ON students
+FOR EACH ROW
+INSERT INTO finalMarks VALUES (NEW.Marks);
+
+-- Test the finalm trigger
+INSERT INTO students VALUES (5, 'SRI', 60.00);
+
+-- Fetch all data from the students table
+SELECT * FROM students;
+
+-- Fetch all data from the finalMarks table
+SELECT * FROM finalMarks;
+
+----------------------------------------------------------------------------------
+                 SAME QUERY WITH TABLES
+-----------------------------------------------------------------------------------
+
+-- Create the students table
+CREATE TABLE students (
+  Rollno INT PRIMARY KEY,
+  Name VARCHAR(30) NOT NULL,
+  Marks DECIMAL(5,2) NOT NULL
+);
+
+Query OK, 0 rows affected
+
+-- Insert initial data into the students table
+INSERT INTO students VALUES (1, 'SRINIVAS', 100.00);
+INSERT INTO students VALUES (2, 'VAMSHI', 90.00);
+INSERT INTO students VALUES (3, 'VIJAY', 80.23);
+
+Query OK, 1 row affected
+Query OK, 1 row affected
+Query OK, 1 row affected
+
+-- Fetch all data from the students table
+SELECT * FROM students;
+
++--------+----------+--------+
+| Rollno |   Name   | Marks  |
++--------+----------+--------+
+|   1    | SRINIVAS | 100.00 |
+|   2    | VAMSHI   |  90.00 |
+|   3    | VIJAY    |  80.23 |
++--------+----------+--------+
+3 rows in set
+
+-- Create trigger to add 100 to Marks before insert
+CREATE TRIGGER addmarks
+BEFORE INSERT ON students
+FOR EACH ROW
+SET NEW.Marks = NEW.Marks + 100;
+
+Query OK, 0 rows affected
+
+-- Test the addmarks trigger
+INSERT INTO students VALUES (4, 'ARJUN', 50.00);
+
+Query OK, 1 row affected
+
+-- Fetch all data from the students table
+SELECT * FROM students;
+
++--------+----------+--------+
+| Rollno |   Name   | Marks  |
++--------+----------+--------+
+|   1    | SRINIVAS | 200.00 |
+|   2    | VAMSHI   | 190.00 |
+|   3    | VIJAY    | 180.23 |
+|   4    | ARJUN    | 150.00 |
++--------+----------+--------+
+4 rows in set
+
+-- Create the finalMarks table
+CREATE TABLE finalMarks (
+  TotalMarks DECIMAL(5,2)
+);
+
+Query OK, 0 rows affected
+
+-- Create trigger to insert into finalMarks after insert on students
+CREATE TRIGGER finalm
+AFTER INSERT ON students
+FOR EACH ROW
+INSERT INTO finalMarks VALUES (NEW.Marks);
+
+Query OK, 0 rows affected
+
+-- Test the finalm trigger
+INSERT INTO students VALUES (5, 'SRI', 60.00);
+
+Query OK, 1 row affected
+
+-- Fetch all data from the students table
+SELECT * FROM students;
+
++--------+----------+--------+
+| Rollno |   Name   | Marks  |
++--------+----------+--------+
+|   1    | SRINIVAS | 200.00 |
+|   2    | VAMSHI   | 190.00 |
+|   3    | VIJAY    | 180.23 |
+|   4    | ARJUN    | 150.00 |
+|   5    | SRI      | 160.00 |
++--------+----------+--------+
+5 rows in set
+
+-- Fetch all data from the finalMarks table
+SELECT * FROM finalMarks;
+
++------------+
+| TotalMarks |
++------------+
+|    200.00  |
+|    190.00  |
+|    180.23  |
+|    150.00  |
+|    160.00  |
++------------+
+5 rows in set
+-------------------------------------------------------

@@ -20,6 +20,8 @@ ON table_name1.column_name = table_name2.column_name
    II>  RIGHT OUTER JOIN(right table returns all rows & left table return only matched rows)
    III> FULL OUTER JOIN(both right and left table contain all matched rows and non matched rows)
 
+3.CROSS JOIN
+
 
 SELECT columns                     
 FROM table1
@@ -37,18 +39,8 @@ FULL [OUTER] JOIN table2
 ON Join_Condition;
 
 
-3.CROSS JOIN
-
-
-
-
-
-
 Examples:
 ---------
-
-
-
 -- Create Tables
 CREATE TABLE StateInfo (
   Statecode int PRIMARY KEY,
@@ -99,7 +91,7 @@ SELECT * FROM StateInfo;
 
 
 INNER JOIN
-----------------------------------------------------------------------------------------
+---------------------------------------
 SELECT 
     usersInfo.UserId,
     usersInfo.UserName,
@@ -119,7 +111,7 @@ INNER JOIN
 
     
 LEFT OUTER JOIN
------------------------------------------------------------------------------
+------------------------------------------------
 SELECT 
     usersInfo.UserId,
     usersInfo.UserName,
@@ -137,7 +129,7 @@ LEFT JOIN
 
 
 RIGHT OUTER JOIN
------------------------------------------------------------------------------
+---------------------------------------------
 SELECT 
     usersInfo.UserId,
     usersInfo.UserName,
@@ -151,7 +143,7 @@ Right outer JOIN
 
 
 FULL OUTER JOIN
------------------------------------------------------------------------------  
+----------------------------------------------
 SELECT 
     usersInfo.UserId,
     usersInfo.UserName,
@@ -231,3 +223,125 @@ FULL OUTER JOIN
 | NULL   | NULL      | Medak      |
 | NULL   | NULL      | Warangal   |
 +--------+-----------+------------+
+
+
+
+SIMPLE EXAMPLE:
+---------------
+JOINS
+-----
+DTABASE NAME: college;
+
+
+select * from courses;
++-----+----------------+
+| cid | cname          |
++-----+----------------+
+|   1 | automobile eng |
+|   2 | cyber-security |
+|   3 | CSE            |
+|   4 | EEE            |
+|   5 | Mech           |
+|   6 | AIML           |
+|   7 | DS             |
+|   8 | ECE            |
+|   9 | IT             |
+|  10 | IOT            |
++-----+----------------+
+
+
+
+select * from studentinfo;
++-----+----------+------+
+| sid | sname    | cid  |
++-----+----------+------+
+|   1 | srinivas |    1 |
+|   2 | sridhar  |    2 |
+|   3 | praveen  |    3 |
+|   4 | vamshi   |    4 |
+|   5 | malli    |    5 |
+|   6 | shalon   | NULL |
++-----+----------+------+
+6 rows in set (0.00 sec)
+
+
+INNER JOIN:
+----------
+select studentinfo.sid,studentinfo.sname,courses.cname
+from studentinfo
+inner join courses on studentinfo.cid=courses.cid;
++-----+----------+----------------+
+| sid | sname    | cname          |
++-----+----------+----------------+
+|   1 | srinivas | automobile eng |
+|   2 | sridhar  | cyber-security |
+|   3 | praveen  | CSE            |
+|   4 | vamshi   | EEE            |
+|   5 | malli    | Mech           |
++-----+----------+----------------+
+
+
+
+LEFT OUTER JOIN:
+---------------
+select studentinfo.sid,studentinfo.sname,courses.cname
+from studentinfo
+left outer join courses on studentinfo.cid=courses.cid;
++-----+----------+----------------+
+| sid | sname    | cname          |
++-----+----------+----------------+
+|   1 | srinivas | automobile eng |
+|   2 | sridhar  | cyber-security |
+|   3 | praveen  | CSE            |
+|   4 | vamshi   | EEE            |
+|   5 | malli    | Mech           |
+|   6 | shalon   | NULL           |
++-----+----------+----------------+
+
+
+
+RIGHT OUTER JOIN:
+---------------
+select studentinfo.sid,studentinfo.sname,courses.cname
+from studentinfo
+right outer join courses on studentinfo.cid=courses.cid;
++------+----------+----------------+
+| sid  | sname    | cname          |
++------+----------+----------------+
+|    1 | srinivas | automobile eng |
+|    2 | sridhar  | cyber-security |
+|    3 | praveen  | CSE            |
+|    4 | vamshi   | EEE            |
+|    5 | malli    | Mech           |
+| NULL | NULL     | AIML           |
+| NULL | NULL     | DS             |
+| NULL | NULL     | ECE            |
+| NULL | NULL     | IT             |
+| NULL | NULL     | IOT            |
++------+----------+----------------+
+
+FULL OUTER JOIN:
+---------------
+ SELECT studentinfo.sid, studentinfo.sname, courses.cname
+    -> FROM studentinfo
+    -> LEFT JOIN courses ON studentinfo.cid = courses.cid
+    -> UNION
+    -> SELECT studentinfo.sid, studentinfo.sname, courses.cname
+    -> FROM studentinfo
+    -> RIGHT JOIN courses ON studentinfo.cid = courses.cid;
++------+----------+----------------+
+| sid  | sname    | cname          |
++------+----------+----------------+
+|    1 | srinivas | automobile eng |
+|    2 | sridhar  | cyber-security |
+|    3 | praveen  | CSE            |
+|    4 | vamshi   | EEE            |
+|    5 | malli    | Mech           |
+|    6 | shalon   | NULL           |
+| NULL | NULL     | AIML           |
+| NULL | NULL     | DS             |
+| NULL | NULL     | ECE            |
+| NULL | NULL     | IT             |
+| NULL | NULL     | IOT            |
++------+----------+----------------+
+

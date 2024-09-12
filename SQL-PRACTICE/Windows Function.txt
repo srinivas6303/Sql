@@ -1,0 +1,75 @@
+show databases;
+use srinivas;
+show tables;
+
+CREATE TABLE employees (
+    eid INT AUTO_INCREMENT PRIMARY KEY,
+    ename VARCHAR(100) NOT NULL,
+    esalary DECIMAL(10, 2) NOT NULL,
+    dept ENUM('IT', 'CS', 'MECH', 'EEE') NOT NULL
+);
+
+INSERT INTO employees (ename, esalary, dept) VALUES
+('Alice', 60000, 'IT'),
+('Bob', 55000, 'CS'),
+('Charlie', 58000, 'MECH'),
+('David', 62000, 'EEE'),
+('Eva', 61000, 'IT'),
+('Frank', 59000, 'CS'),
+('Grace', 57000, 'MECH'),
+('Hank', 63000, 'EEE'),
+('Ivy', 60000, 'IT'),
+('Jack', 55000, 'CS'),
+('Karen', 58000, 'MECH'),
+('Leo', 62000, 'EEE'),
+('Mona', 61000, 'IT'),
+('Nate', 59000, 'CS'),
+('Olive', 57000, 'MECH');
+
+select *  from employees;
+
+select dept,max(esalary) as salary from employees
+group by dept
+order by salary desc;
+
+select e.*,
+max(esalary) over(partition by dept) as maxsalary from employees e;
+
+select e.*,
+row_number() over(partition by dept) as rn from employees e;
+
+
+SELECT dept
+FROM (
+    SELECT e.*,
+           ROW_NUMBER() OVER (PARTITION BY dept ORDER BY esalary DESC) AS rn
+    FROM employees e
+) AS ranked_employees
+WHERE rn > 3;
+
+select * from(
+select e.*,
+row_number() over(partition by dept order by eid asc) as rn
+from employees e) x
+where x.rn<3;
+
+select * from(
+select e.*,
+rank() over(partition by dept order by esalary desc) as rk
+from employees e) x
+where x.rk<3;
+
+
+select e.*,
+dense_rank() over(partition by dept order by esalary) as denrk
+from employees e;
+
+
+select * from(
+select e.*,
+dense_rank() over(partition by dept order by esalary) as denrk from employees e) x
+where x.denrk<2;
+
+
+
+
